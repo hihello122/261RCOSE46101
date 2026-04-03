@@ -1,0 +1,12 @@
+# 데이터
+*.tar.gz
+data/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 환경
+.env
+*.egg-info/
