@@ -1,6 +1,8 @@
 # 데이터
 *.tar.gz
 data/
+ckpts/
+.safetensors
 
 # Python
 __pycache__/
