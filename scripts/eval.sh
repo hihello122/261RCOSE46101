@@ -5,10 +5,14 @@ set -euo pipefail
 # ConGra 평가 스크립트
 # GPU 인스턴스에서 실행
 #
-# 단일 모드:           bash scripts/eval.sh --mode baseline
-# 전체 ablation:       bash scripts/eval.sh --ablation
-# zero-shot만:         bash scripts/eval.sh --zeroshot
-# ablation + zeroshot: bash scripts/eval.sh --ablation --zeroshot
+# 단일 모드:              bash scripts/eval.sh --mode baseline
+# 전체 ablation:          bash scripts/eval.sh --ablation
+# zero-shot만:            bash scripts/eval.sh --zeroshot
+# ablation + zeroshot:    bash scripts/eval.sh --ablation --zeroshot
+#
+# HumanEval-X Java:       bash scripts/eval.sh --mode baseline --humanevalx
+# zero-shot + HumanEval:  bash scripts/eval.sh --zeroshot --humanevalx
+# ablation + HumanEval:   bash scripts/eval.sh --ablation --zeroshot --humanevalx
 # ═══════════════════════════════════════════════════════════════
 
 # ── 실험 설정 ─────────────────────────────────────────────────
@@ -20,6 +24,7 @@ MAX_SAMPLES=""           # 빈 문자열이면 전체 평가
 RUN_BASELINE_COMPARE=false
 ABLATION=false
 ZEROSHOT=false
+HUMANEVALX=false
 
 # base 모델명: ckpts가 없을 때를 위해 기본값 설정
 BASE_MODEL_NAME="deepseek-ai/deepseek-coder-1.3b-base"
@@ -31,10 +36,11 @@ while [[ $# -gt 0 ]]; do
         --ctx)         CONTEXT_LINES="$2";    shift 2 ;;
         --split)       SPLIT="$2";            shift 2 ;;
         --max-samples) MAX_SAMPLES="$2";      shift 2 ;;
-        --compare)     RUN_BASELINE_COMPARE=true; shift ;;
-        --ablation)    ABLATION=true;         shift ;;
-        --zeroshot)    ZEROSHOT=true;         shift ;;
-        --base-model)  BASE_MODEL_NAME="$2";  shift 2 ;;
+        --compare)       RUN_BASELINE_COMPARE=true; shift ;;
+        --ablation)      ABLATION=true;         shift ;;
+        --zeroshot)      ZEROSHOT=true;         shift ;;
+        --base-model)    BASE_MODEL_NAME="$2";  shift 2 ;;
+        --humanevalx)    HUMANEVALX=true;       shift ;;
         *) echo "Unknown arg: $1"; exit 1 ;;
     esac
 done
@@ -240,6 +246,116 @@ for m in "${MODES[@]}"; do
     fi
 done
 
+# ── Code Generation Benchmark 평가 ───────────────────────────
+if [ "${HUMANEVALX}" = true ]; then
+    CODEGEN_BENCHMARKS=("humanevalx")
+
+    echo ""
+    echo "========================================"
+    echo " Code Generation Benchmark Evaluation"
+    echo " Benchmarks: ${CODEGEN_BENCHMARKS[*]}"
+    echo "========================================"
+
+    for bm in "${CODEGEN_BENCHMARKS[@]}"; do
+
+        # ── zero-shot (base model) ──────────────────────────────
+        if [ "${ZEROSHOT}" = true ]; then
+            base_model=$(_detect_base_model)
+            CG_OUT="./eval_results/codegen_${bm}/base"
+            mkdir -p "${CG_OUT}"
+            CG_BASE_RESULT="${CG_OUT}/metrics_${bm}_base.json"
+            if [ "${ABLATION}" = true ] && [ -f "${CG_BASE_RESULT}" ]; then
+                echo "[Skip] codegen ${bm}/base: zero-shot 결과 이미 존재 → ${CG_BASE_RESULT}"
+            else
+                LOG_FILE="${LOG_DIR}/eval_codegen_zeroshot_${bm}_${TIMESTAMP}.log"
+                echo "[Log] ${LOG_FILE}"
+                (
+                    exec > >(tee -a "${LOG_FILE}") 2>&1
+                    echo "========================================"
+                    echo " Zero-shot | ${bm} | model: ${base_model}"
+                    echo "========================================"
+                    CMD="python3 evaluate.py \
+                        --model_name ${base_model} \
+                        --benchmark ${bm} \
+                        --max_new_tokens ${MAX_NEW_TOKENS} \
+                        --output_dir ${CG_OUT}"
+                    [ -n "${MAX_SAMPLES}" ] && CMD="${CMD} --max_samples ${MAX_SAMPLES}"
+                    eval ${CMD}
+                )
+            fi
+        fi
+
+        # ── fine-tuned (모드별) ─────────────────────────────────
+        if [ "${ZEROSHOT}" = false ] || [ "${ABLATION}" = true ]; then
+            for m in "${MODES[@]}"; do
+                MODEL_DIR="./ckpts/${m}_ctx${CONTEXT_LINES}/final"
+                CG_OUT="./eval_results/codegen_${bm}/${m}_ctx${CONTEXT_LINES}"
+                mkdir -p "${CG_OUT}"
+                CG_FINETUNED_RESULT="${CG_OUT}/metrics_${bm}_finetuned.json"
+
+                if [ ! -d "${MODEL_DIR}" ]; then
+                    echo "[Skip] codegen ${bm}/${m}: 모델 없음 → ${MODEL_DIR}"
+                    continue
+                fi
+
+                if [ "${ABLATION}" = true ] && [ -f "${CG_FINETUNED_RESULT}" ]; then
+                    echo "[Skip] codegen ${bm}/${m}: 파인튜닝 결과 이미 존재 → ${CG_FINETUNED_RESULT}"
+                    continue
+                fi
+
+                LOG_FILE="${LOG_DIR}/eval_codegen_${bm}_${m}_ctx${CONTEXT_LINES}_${TIMESTAMP}.log"
+                echo "[Log] ${LOG_FILE}"
+                (
+                    exec > >(tee -a "${LOG_FILE}") 2>&1
+                    echo "========================================"
+                    echo " Fine-tuned | ${bm} | mode: ${m} | ctx: ${CONTEXT_LINES}"
+                    echo " Model:  ${MODEL_DIR}"
+                    echo " Output: ${CG_OUT}"
+                    echo "========================================"
+                    CMD="python3 evaluate.py \
+                        --model_dir ${MODEL_DIR} \
+                        --benchmark ${bm} \
+                        --max_new_tokens ${MAX_NEW_TOKENS} \
+                        --output_dir ${CG_OUT}"
+                    [ -n "${MAX_SAMPLES}" ] && CMD="${CMD} --max_samples ${MAX_SAMPLES}"
+                    eval ${CMD}
+                )
+            done
+        fi
+
+    done
+
+    # ── Codegen 요약 ─────────────────────────────────────────────
+    echo ""
+    echo "========================================"
+    echo " Code Generation Results 요약"
+    echo "========================================"
+    python3 -c "
+import json, os, glob
+
+benchmarks = ['humanevalx']
+
+for bm in benchmarks:
+    print(f'\n[{bm}]')
+    print(f\"  {'Tag':<30} {'pass@1':>8} {'BLEU':>8} {'CodeBLEU':>10} {'chrF':>8}\")
+    print('  ' + '-' * 68)
+    pattern = f'./eval_results/codegen_{bm}/**/metrics_*.json'
+    for path in sorted(glob.glob(pattern, recursive=True)):
+        try:
+            with open(path) as f:
+                data = json.load(f)
+            tag = os.path.basename(os.path.dirname(path))
+            p1   = data.get('pass@1', 0.0)
+            bleu = data.get('avg_bleu', 0.0)
+            cb   = data.get('avg_codebleu', 0.0)
+            chrf = data.get('avg_chrf', 0.0)
+            print(f\"  {tag:<30} {p1:>8.4f} {bleu:>8.4f} {cb:>10.4f} {chrf:>8.4f}\")
+        except Exception:
+            pass
+"
+    echo "========================================"
+fi
+
 # ── Ablation 완료 요약 ────────────────────────────────────────
 if [ "${ABLATION}" = true ]; then
     echo ""
@@ -253,7 +369,7 @@ modes = ['baseline', 'type', 'ast', 'ast+type']
 ctx = ${CONTEXT_LINES}
 keys = ['exact_match_rate', 'avg_bleu', 'avg_codebleu', 'avg_token_f1', 'avg_chrf', 'avg_edit_distance']
 labels = ['EM', 'BLEU', 'CodeBLEU', 'Token-F1', 'chrF', 'EditDist']
-has_zeroshot = ${ZEROSHOT}
+has_zeroshot = '${ZEROSHOT}' == 'true'
 
 # 헤더
 print(f\"{'Model':<18}\" + ''.join(f'{l:>12}' for l in labels))
