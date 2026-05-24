@@ -2,9 +2,8 @@
 eval_results/ 디렉토리의 JSON 파일을 읽어 ablation 결과를 시각화.
 
 Usage:
-    python visualize.py                          # eval_results/ 자동 탐색
-    python visualize.py --results_dir ./eval_results --ctx 20
-    python visualize.py --output_dir ./figures
+    python visualize.py --model-tag qwen2.5-coder-1.5b --ctx 20
+    python visualize.py --results_dir ./eval_results/qwen2.5-coder-1.5b --output_dir ./figures/qwen2.5-coder-1.5b
 """
 
 import argparse
@@ -89,13 +88,13 @@ def metric_val(overall, key):
 
 # ── 그래프 1: Ablation 전체 지표 비교 (grouped bar) ──────────
 
-def plot_ablation_overview(data, modes, output_dir, ctx):
+def plot_ablation_overview(data, modes, output_dir, ctx, title_suffix=""):
     n_metrics = len(METRICS)
     n_modes = len(modes)
     has_base = any("base" in data[m] for m in modes)
 
     fig, axes = plt.subplots(1, n_metrics, figsize=(3.5 * n_metrics, 4.5))
-    fig.suptitle(f"Ablation Overview  (ctx={ctx})", fontsize=14, fontweight="bold", y=1.02)
+    fig.suptitle(f"Ablation Overview  (ctx={ctx}){title_suffix}", fontsize=14, fontweight="bold", y=1.02)
 
     x = np.arange(n_modes)
     width = 0.35 if has_base else 0.55
@@ -138,7 +137,7 @@ def plot_ablation_overview(data, modes, output_dir, ctx):
 
 # ── 그래프 2: Fine-tuned vs Zero-shot 델타 heatmap ──────────
 
-def plot_delta_heatmap(data, modes, output_dir, ctx):
+def plot_delta_heatmap(data, modes, output_dir, ctx, title_suffix=""):
     has_base = any("base" in data[m] for m in modes)
     if not has_base:
         return
@@ -173,7 +172,7 @@ def plot_delta_heatmap(data, modes, output_dir, ctx):
     ax.set_xticklabels(METRIC_LABELS, fontsize=9, rotation=30, ha="right")
     ax.set_yticks(range(len(valid_modes)))
     ax.set_yticklabels(valid_modes, fontsize=10)
-    ax.set_title(f"Fine-tuned Δ over Zero-shot  (ctx={ctx})\n(green = fine-tuned better)", fontsize=11, pad=10)
+    ax.set_title(f"Fine-tuned Δ over Zero-shot  (ctx={ctx}){title_suffix}\n(green = fine-tuned better)", fontsize=11, pad=10)
 
     for i in range(len(valid_modes)):
         for j in range(len(METRICS)):
@@ -192,7 +191,7 @@ def plot_delta_heatmap(data, modes, output_dir, ctx):
 
 # ── 그래프 3: Per-project 지표 비교 ─────────────────────────
 
-def plot_per_project(data, modes, output_dir, ctx):
+def plot_per_project(data, modes, output_dir, ctx, title_suffix=""):
     # 전체 프로젝트 수집
     projects = set()
     for m in modes:
@@ -209,7 +208,7 @@ def plot_per_project(data, modes, output_dir, ctx):
     show_labels = ["BLEU", "CodeBLEU", "Token-F1", "chrF"]
 
     fig, axes = plt.subplots(len(show_metrics), 1, figsize=(max(8, len(modes) * 1.8), 3.5 * len(show_metrics)))
-    fig.suptitle(f"Per-project Metrics by Mode  (ctx={ctx})", fontsize=13, fontweight="bold")
+    fig.suptitle(f"Per-project Metrics by Mode  (ctx={ctx}){title_suffix}", fontsize=13, fontweight="bold")
 
     colors = plt.cm.tab10(np.linspace(0, 0.8, len(projects)))
     x = np.arange(len(modes))
@@ -243,7 +242,7 @@ def plot_per_project(data, modes, output_dir, ctx):
 
 # ── 그래프 4: Radar chart (ablation 모드별 종합 프로파일) ────
 
-def plot_radar(data, modes, output_dir, ctx):
+def plot_radar(data, modes, output_dir, ctx, title_suffix=""):
     # edit_distance는 반전(낮을수록 좋으므로 1 - val)
     radar_keys = ["exact_match_rate", "avg_bleu", "avg_codebleu", "avg_token_f1", "avg_chrf"]
     radar_labels = ["Exact Match", "BLEU", "CodeBLEU", "Token-F1", "chrF"]
@@ -267,7 +266,7 @@ def plot_radar(data, modes, output_dir, ctx):
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(radar_labels, fontsize=10)
     ax.set_ylim(0, 1)
-    ax.set_title(f"Ablation Radar  (ctx={ctx}, fine-tuned)", fontsize=12, pad=20)
+    ax.set_title(f"Ablation Radar  (ctx={ctx}, fine-tuned){title_suffix}", fontsize=12, pad=20)
     ax.legend(loc="upper right", bbox_to_anchor=(1.35, 1.15), fontsize=9, frameon=False)
     ax.grid(True, linestyle="--", alpha=0.5)
 
@@ -311,6 +310,7 @@ def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--results_dir", default="./eval_results")
     p.add_argument("--output_dir", default="./figures")
+    p.add_argument("--model-tag", default=None, help="eval_results/<model-tag> 하위 결과를 사용")
     p.add_argument("--ctx", type=int, default=None, help="컨텍스트 라인 수 (미지정 시 자동 탐지)")
     return p.parse_args()
 
@@ -319,6 +319,10 @@ def main():
     args = parse_args()
     results_dir = Path(args.results_dir)
     output_dir = Path(args.output_dir)
+    if args.model_tag:
+        results_dir = results_dir / args.model_tag
+        if args.output_dir == "./figures":
+            output_dir = output_dir / args.model_tag
     output_dir.mkdir(parents=True, exist_ok=True)
 
     if not results_dir.exists():
@@ -339,12 +343,15 @@ def main():
 
         modes = ordered_modes(data)
         print(f"  Modes: {modes}")
+        print(f"  Results dir: {results_dir}")
+        print(f"  Output dir:  {output_dir}")
         print(f"  Generating plots...")
 
-        plot_ablation_overview(data, modes, output_dir, ctx)
-        plot_delta_heatmap(data, modes, output_dir, ctx)
-        plot_per_project(data, modes, output_dir, ctx)
-        plot_radar(data, modes, output_dir, ctx)
+        title_suffix = f"  [{args.model_tag}]" if args.model_tag else ""
+        plot_ablation_overview(data, modes, output_dir, ctx, title_suffix)
+        plot_delta_heatmap(data, modes, output_dir, ctx, title_suffix)
+        plot_per_project(data, modes, output_dir, ctx, title_suffix)
+        plot_radar(data, modes, output_dir, ctx, title_suffix)
         print_summary_table(data, modes, ctx)
 
     print(f"\nAll figures saved to: {output_dir}/")

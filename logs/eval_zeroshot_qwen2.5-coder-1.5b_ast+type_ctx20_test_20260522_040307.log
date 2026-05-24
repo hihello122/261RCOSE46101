@@ -1,0 +1,21 @@
+========================================
+ Zero-shot Evaluation
+========================================
+ Mode:        ast+type
+ Model tag:   qwen2.5-coder-1.5b
+ Base model:  /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+ Dataset:     ./data/processed/dataset_ast+type_ctx20
+ Split:       test
+ Output:      ./eval_results/qwen2.5-coder-1.5b/ast+type_ctx20
+========================================
+
+Loading dataset...
+  test: 81 samples
+Loading base model: /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:213: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Loading weights:   4%|▍         | 13/338 [00:00<00:02, 129.39it/s]Loading weights:  33%|███▎      | 111/338 [00:00<00:00, 627.06it/s]Loading weights:  62%|██████▏   | 208/338 [00:00<00:00, 782.22it/s]Loading weights:  90%|█████████ | 305/338 [00:00<00:00, 855.90it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 785.93it/s]
+
+Generating resolutions (max_new_tokens=512)...
+Evaluating:   0%|          | 0/81 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:468: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)

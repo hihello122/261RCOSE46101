@@ -1,0 +1,113 @@
+========================================
+ ConGra QLoRA Training
+========================================
+ Mode:          baseline
+ Model:         /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+ Model tag:     qwen2.5-coder-1.5b
+ Dataset:       ./data/processed/dataset_baseline_ctx20
+ Output:        /opt/dlami/nvme/ckpts/baseline_ctx20_qwen2.5-coder-1.5b
+ Batch:         2 x 2 = 4
+ LR:            2e-4
+ Epochs:        10 (patience=3)
+ Max seq len:   2048
+ LoRA:          r=16, alpha=32
+ WandB:         false
+========================================
+
+Model:          /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+Dataset:        ./data/processed/dataset_baseline_ctx20
+Output dir:     /opt/dlami/nvme/ckpts/baseline_ctx20_qwen2.5-coder-1.5b
+Effective batch size: 4
+Max seq length: 2048
+
+Loading dataset...
+  Train: 9082 samples
+  Val:   289 samples
+Loading tokenizer...
+Tokenizing dataset (truncation applied here)...
+  Tokenized. Train max tokens: 2048
+Loading model...
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:213: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Loading weights:   4%|▍         | 15/338 [00:00<00:02, 147.44it/s]Loading weights:  33%|███▎      | 113/338 [00:00<00:00, 627.20it/s]Loading weights:  65%|██████▍   | 219/338 [00:00<00:00, 814.39it/s]Loading weights:  94%|█████████▍| 317/338 [00:00<00:00, 873.61it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 798.19it/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+  Attention: sdpa
+  Parameters: 1,543,714,304
+Initializing trainer...
+  Response template: '\n// Resolution\n'
+  Response token ids: [198, 322, 37116, 198]
+[Checkpoint] 기존 체크포인트 없음 → 처음부터 학습
+
+Starting training...
+  Epochs: 10 (with early stopping, patience=3)
+  Batch: 2 x 2 = 4
+
+  0%|          | 0/22710 [00:00<?, ?it/s]  0%|          | 1/22710 [00:02<13:12:38,  2.09s/it]  0%|          | 2/22710 [00:04<12:58:17,  2.06s/it]  0%|          | 3/22710 [00:05<11:00:17,  1.74s/it]  0%|          | 4/22710 [00:09<15:52:07,  2.52s/it]  0%|          | 5/22710 [00:10<13:52:18,  2.20s/it]  0%|          | 6/22710 [00:12<12:07:53,  1.92s/it]  0%|          | 7/22710 [00:14<12:27:24,  1.98s/it]  0%|          | 8/22710 [00:17<15:08:50,  2.40s/it]  0%|          | 9/22710 [00:19<13:26:18,  2.13s/it]  0%|          | 10/22710 [00:22<15:12:37,  2.41s/it]  0%|          | 11/22710 [00:23<13:25:52,  2.13s/it]  0%|          | 12/22710 [00:25<11:53:48,  1.89s/it]  0%|          | 13/22710 [00:27<12:55:48,  2.05s/it]  0%|          | 14/22710 [00:29<12:17:16,  1.95s/it]  0%|          | 15/22710 [00:34<18:40:46,  2.96s/it]  0%|          | 16/22710 [00:36<17:24:36,  2.76s/it]  0%|          | 17/22710 [00:38<14:53:50,  2.36s/it]  0%|          | 18/22710 [00:39<12:39:39,  2.01s/it]  0%|          | 19/22710 [00:43<17:12:54,  2.73s/it]  0%|          | 20/22710 [00:45<14:30:50,  2.30s/it]                                                       0%|          | 20/22710 [00:45<14:30:50,  2.30s/it]  0%|          | 21/22710 [00:48<17:14:21,  2.74s/it]  0%|          | 22/22710 [00:50<14:43:02,  2.34s/it]  0%|          | 23/22710 [00:51<13:08:15,  2.08s/it]  0%|          | 24/22710 [00:55<16:25:47,  2.61s/it]  0%|          | 25/22710 [00:56<14:07:07,  2.24s/it]  0%|          | 26/22710 [00:58<13:23:54,  2.13s/it]  0%|          | 27/22710 [01:01<14:19:11,  2.27s/it]  0%|          | 28/22710 [01:03<13:05:43,  2.08s/it]  0%|          | 29/22710 [01:04<11:26:55,  1.82s/it]  0%|          | 30/22710 [01:06<11:55:42,  1.89s/it]  0%|          | 31/22710 [01:07<10:57:34,  1.74s/it]  0%|          | 32/22710 [01:09<10:13:07,  1.62s/it]  0%|          | 33/22710 [01:12<14:02:57,  2.23s/it]  0%|          | 34/22710 [01:14<12:46:20,  2.03s/it]  0%|          | 35/22710 [01:15<11:34:15,  1.84s/it]  0%|          | 36/22710 [01:18<12:57:33,  2.06s/it]  0%|          | 37/22710 [01:20<12:48:38,  2.03s/it]  0%|          | 38/22710 [01:21<11:34:28,  1.84s/it]  0%|          | 39/22710 [01:23<12:03:40,  1.92s/it]  0%|          | 40/22710 [01:25<11:34:36,  1.84s/it]                                                       0%|          | 40/22710 [01:25<11:34:36,  1.84s/it]  0%|          | 41/22710 [01:26<10:26:44,  1.66s/it]  0%|          | 42/22710 [01:28<10:29:00,  1.66s/it]  0%|          | 43/22710 [01:29<9:59:11,  1.59s/it]   0%|          | 44/22710 [01:31<10:07:53,  1.61s/it]  0%|          | 45/22710 [01:32<9:22:23,  1.49s/it]   0%|          | 46/22710 [01:35<12:50:04,  2.04s/it]  0%|          | 47/22710 [01:37<12:00:17,  1.91s/it]  0%|          | 48/22710 [01:38<11:04:27,  1.76s/it]  0%|          | 49/22710 [01:41<11:51:29,  1.88s/it]  0%|          | 50/22710 [01:44<15:39:40,  2.49s/it]  0%|          | 51/22710 [01:48<18:13:05,  2.89s/it]  0%|          | 52/22710 [01:50<15:51:40,  2.52s/it]  0%|          | 53/22710 [01:52<14:07:18,  2.24s/it]  0%|          | 54/22710 [01:53<13:31:05,  2.15s/it]  0%|          | 55/22710 [01:56<13:58:12,  2.22s/it]  0%|          | 56/22710 [01:58<14:05:58,  2.24s/it]  0%|          | 57/22710 [02:00<14:02:13,  2.23s/it]  0%|          | 58/22710 [02:03<13:59:43,  2.22s/it]  0%|          | 59/22710 [02:06<16:52:03,  2.68s/it]  0%|          | 60/22710 [02:09<17:09:00,  2.73s/it]                                                       0%|          | 60/22710 [02:09<17:09:00,  2.73s/it]  0%|          | 61/22710 [02:11<15:22:06,  2.44s/it]  0%|          | 62/22710 [02:12<13:17:47,  2.11s/it]  0%|          | 63/22710 [02:14<11:46:17,  1.87s/it]  0%|          | 64/22710 [02:15<10:52:47,  1.73s/it]  0%|          | 65/22710 [02:18<13:05:16,  2.08s/it]  0%|          | 66/22710 [02:19<11:19:37,  1.80s/it]  0%|          | 67/22710 [02:20<9:58:29,  1.59s/it]   0%|          | 68/22710 [02:25<16:18:21,  2.59s/it]  0%|          | 69/22710 [02:27<14:33:24,  2.31s/it]  0%|          | 70/22710 [02:28<13:10:48,  2.10s/it]  0%|          | 71/22710 [02:30<11:52:15,  1.89s/it]  0%|          | 72/22710 [02:31<10:55:26,  1.74s/it]  0%|          | 73/22710 [02:35<14:59:05,  2.38s/it]  0%|          | 74/22710 [02:36<13:05:52,  2.08s/it]  0%|          | 75/22710 [02:38<12:47:21,  2.03s/it]  0%|          | 76/22710 [02:40<11:35:17,  1.84s/it]  0%|          | 77/22710 [02:41<10:19:29,  1.64s/it]  0%|          | 78/22710 [02:44<12:31:57,  1.99s/it]  0%|          | 79/22710 [02:45<11:51:59,  1.89s/it]  0%|          | 80/22710 [02:48<12:55:35,  2.06s/it]                                                       0%|          | 80/22710 [02:48<12:55:35,  2.06s/it]  0%|          | 81/22710 [02:49<12:16:54,  1.95s/it]  0%|          | 82/22710 [02:51<11:52:33,  1.89s/it]  0%|          | 83/22710 [02:53<10:49:12,  1.72s/it]  0%|          | 84/22710 [02:54<10:54:38,  1.74s/it]  0%|          | 85/22710 [02:56<11:37:26,  1.85s/it]  0%|          | 86/22710 [02:59<12:36:27,  2.01s/it]  0%|          | 87/22710 [03:00<11:26:01,  1.82s/it]  0%|          | 88/22710 [03:03<13:59:25,  2.23s/it]  0%|          | 89/22710 [03:05<12:34:51,  2.00s/it]  0%|          | 90/22710 [03:06<11:28:47,  1.83s/it]  0%|          | 91/22710 [03:09<12:18:41,  1.96s/it]  0%|          | 92/22710 [03:11<14:11:58,  2.26s/it]  0%|          | 93/22710 [03:13<13:08:11,  2.09s/it]  0%|          | 94/22710 [03:15<12:55:56,  2.06s/it]  0%|          | 95/22710 [03:16<11:29:49,  1.83s/it]  0%|          | 96/22710 [03:17<9:54:54,  1.58s/it]   0%|          | 97/22710 [03:19<9:26:39,  1.50s/it]  0%|          | 98/22710 [03:21<10:35:09,  1.69s/it]  0%|          | 99/22710 [03:22<10:12:05,  1.62s/it]  0%|          | 100/22710 [03:24<9:53:25,  1.57s/it]                                                       0%|          | 100/22710 [03:24<9:53:25,  1.57s/it]  0%|          | 101/22710 [03:25<9:10:40,  1.46s/it]  0%|          | 102/22710 [03:26<8:26:34,  1.34s/it]  0%|          | 103/22710 [03:29<10:37:07,  1.69s/it]  0%|          | 104/22710 [03:30<10:08:55,  1.62s/it]  0%|          | 105/22710 [03:32<10:19:52,  1.65s/it]  0%|          | 106/22710 [03:33<10:21:15,  1.65s/it]  0%|          | 107/22710 [03:35<9:56:59,  1.58s/it]   0%|          | 108/22710 [03:37<11:06:03,  1.77s/it]  0%|          | 109/22710 [03:39<11:04:28,  1.76s/it]  0%|          | 110/22710 [03:41<11:51:44,  1.89s/it]  0%|          | 111/22710 [03:44<14:05:00,  2.24s/it]  0%|          | 112/22710 [03:46<12:54:48,  2.06s/it]  0%|          | 113/22710 [03:48<14:12:51,  2.26s/it]  1%|          | 114/22710 [03:50<12:51:55,  2.05s/it]  1%|          | 115/22710 [03:52<12:48:44,  2.04s/it]  1%|          | 116/22710 [03:54<12:06:36,  1.93s/it]  1%|          | 117/22710 [03:55<10:39:32,  1.70s/it]  1%|          | 118/22710 [03:57<11:37:29,  1.85s/it]  1%|          | 119/22710 [04:00<13:09:29,  2.10s/it]  1%|          | 120/22710 [04:02<13:52:10,  2.21s/it]                                                        1%|          | 120/22710 [04:02<13:52:10,  2.21s/it]  1%|          | 121/22710 [04:05<14:31:15,  2.31s/it]  1%|          | 122/22710 [04:06<13:18:47,  2.12s/it]  1%|          | 123/22710 [04:08<12:21:47,  1.97s/it]  1%|          | 124/22710 [04:10<13:04:57,  2.09s/it]  1%|          | 125/22710 [04:12<11:53:03,  1.89s/it]  1%|          | 126/22710 [04:14<11:38:18,  1.86s/it]  1%|          | 127/22710 [04:16<12:25:34,  1.98s/it]  1%|          | 128/22710 [04:17<11:00:49,  1.76s/it]  1%|          | 129/22710 [04:21<14:35:45,  2.33s/it]  1%|          | 130/22710 [04:22<12:34:26,  2.00s/it]  1%|          | 131/22710 [04:24<11:59:11,  1.91s/it]  1%|          | 132/22710 [04:26<13:15:14,  2.11s/it]  1%|          | 133/22710 [04:28<12:29:32,  1.99s/it]  1%|          | 134/22710 [04:30<11:50:15,  1.89s/it]  1%|          | 135/22710 [04:31<11:45:08,  1.87s/it]  1%|          | 136/22710 [04:33<11:02:45,  1.76s/it]  1%|          | 137/22710 [04:34<9:50:42,  1.57s/it]   1%|          | 138/22710 [04:35<9:15:31,  1.48s/it]  1%|          | 139/22710 [04:40<14:31:48,  2.32s/it]  1%|          | 140/22710 [04:41<13:10:57,  2.10s/it]                                                        1%|          | 140/22710 [04:41<13:10:57,  2.10s/it]  1%|          | 141/22710 [04:44<14:41:17,  2.34s/it]  1%|          | 142/22710 [04:46<13:38:08,  2.18s/it]  1%|          | 143/22710 [04:47<12:30:15,  1.99s/it]  1%|          | 144/22710 [04:49<10:45:01,  1.72s/it]  1%|          | 145/22710 [04:50<10:30:28,  1.68s/it]  1%|          | 146/22710 [04:52<11:05:05,  1.77s/it]  1%|          | 147/22710 [04:53<10:19:48,  1.65s/it]  1%|          | 148/22710 [04:55<10:32:26,  1.68s/it]  1%|          | 149/22710 [04:57<10:18:06,  1.64s/it]  1%|          | 150/22710 [05:00<13:13:56,  2.11s/it]  1%|          | 151/22710 [05:04<16:15:03,  2.59s/it]  1%|          | 152/22710 [05:05<14:38:09,  2.34s/it]  1%|          | 153/22710 [05:07<12:59:08,  2.07s/it]  1%|          | 154/22710 [05:09<12:17:37,  1.96s/it]  1%|          | 155/22710 [05:10<11:39:10,  1.86s/it]  1%|          | 156/22710 [05:12<11:33:59,  1.85s/it]  1%|          | 157/22710 [05:14<10:49:19,  1.73s/it]  1%|          | 158/22710 [05:15<9:44:05,  1.55s/it]   1%|          | 159/22710 [05:16<10:07:18,  1.62s/it]  1%|          | 160/22710 [05:19<12:03:40,  1.93s/it]                                                        1%|          | 160/22710 [05:19<12:03:40,  1.93s/it]  1%|          | 161/22710 [05:20<10:47:04,  1.72s/it]  1%|          | 162/22710 [05:22<9:51:50,  1.57s/it]   1%|          | 163/22710 [05:26<14:26:59,  2.31s/it]  1%|          | 164/22710 [05:28<13:59:42,  2.23s/it]  1%|          | 165/22710 [05:29<12:41:12,  2.03s/it]  1%|          | 166/22710 [05:31<11:39:29,  1.86s/it]  1%|          | 167/22710 [05:32<10:26:24,  1.67s/it]  1%|          | 168/22710 [05:33<10:05:55,  1.61s/it]  1%|          | 169/22710 [05:38<15:12:01,  2.43s/it]  1%|          | 170/22710 [05:40<15:21:02,  2.45s/it]  1%|          | 171/22710 [05:42<13:44:41,  2.20s/it]  1%|          | 172/22710 [05:43<12:11:10,  1.95s/it]  1%|          | 173/22710 [05:44<10:50:14,  1.73s/it]  1%|          | 174/22710 [05:48<14:57:58,  2.39s/it]  1%|          | 175/22710 [05:50<13:30:33,  2.16s/it]  1%|          | 176/22710 [05:51<11:34:09,  1.85s/it]  1%|          | 177/22710 [05:52<10:03:03,  1.61s/it]  1%|          | 178/22710 [05:53<9:10:42,  1.47s/it]   1%|          | 179/22710 [05:55<9:21:15,  1.49s/it]  1%|          | 180/22710 [05:56<9:35:01,  1.53s/it]                                                       1%|          | 180/22710 [05:56<9:35:01,  1.53s/it]  1%|          | 181/22710 [05:57<8:31:02,  1.36s/it]  1%|          | 182/22710 [05:59<8:08:35,  1.30s/it]  1%|          | 183/22710 [06:00<8:27:33,  1.35s/it]  1%|          | 184/22710 [06:02<8:47:44,  1.41s/it]  1%|          | 185/22710 [06:03<9:24:04,  1.50s/it]  1%|          | 186/22710 [06:05<9:22:48,  1.50s/it]  1%|          | 187/22710 [06:07<10:02:56,  1.61s/it]  1%|          | 188/22710 [06:08<9:53:12,  1.58s/it]   1%|          | 189/22710 [06:12<14:14:36,  2.28s/it]  1%|          | 190/22710 [06:14<13:45:30,  2.20s/it]  1%|          | 191/22710 [06:17<15:51:43,  2.54s/it]  1%|          | 192/22710 [06:19<13:42:20,  2.19s/it]  1%|          | 193/22710 [06:20<12:09:20,  1.94s/it]  1%|          | 194/22710 [06:22<11:11:26,  1.79s/it]  1%|          | 195/22710 [06:24<11:36:58,  1.86s/it]  1%|          | 196/22710 [06:25<10:57:24,  1.75s/it]  1%|          | 197/22710 [06:27<10:39:38,  1.70s/it]  1%|          | 198/22710 [06:30<12:47:18,  2.05s/it]  1%|          | 199/22710 [06:31<12:20:00,  1.97s/it]  1%|          | 200/22710 [06:35<15:39:09,  2.50s/it]                                                        1%|          | 200/22710 [06:35<15:39:09,  2.50s/it]{'loss': '0', 'grad_norm': '0', 'learning_rate': '5.572e-06', 'entropy': '0', 'num_tokens': '4.685e+04', 'mean_token_accuracy': '0', 'epoch': '0.008809'}
+{'loss': '0', 'grad_norm': '0', 'learning_rate': '1.144e-05', 'entropy': '0', 'num_tokens': '9.2e+04', 'mean_token_accuracy': '0', 'epoch': '0.01762'}
+{'loss': '0.02535', 'grad_norm': '0', 'learning_rate': '1.73e-05', 'entropy': '0.01489', 'num_tokens': '1.403e+05', 'mean_token_accuracy': '0.02083', 'epoch': '0.02643'}
+{'loss': '0', 'grad_norm': '0', 'learning_rate': '2.317e-05', 'entropy': '0', 'num_tokens': '1.841e+05', 'mean_token_accuracy': '0', 'epoch': '0.03523'}
+{'loss': '0', 'grad_norm': '0', 'learning_rate': '2.903e-05', 'entropy': '0', 'num_tokens': '2.269e+05', 'mean_token_accuracy': '0', 'epoch': '0.04404'}
+{'loss': '0', 'grad_norm': '0', 'learning_rate': '3.49e-05', 'entropy': '0', 'num_tokens': '2.712e+05', 'mean_token_accuracy': '0', 'epoch': '0.05285'}
+{'loss': '0', 'grad_norm': '0', 'learning_rate': '4.076e-05', 'entropy': '0', 'num_tokens': '3.151e+05', 'mean_token_accuracy': '0', 'epoch': '0.06166'}
+{'loss': '0.5211', 'grad_norm': '0', 'learning_rate': '4.663e-05', 'entropy': '0.01219', 'num_tokens': '3.57e+05', 'mean_token_accuracy': '0.04629', 'epoch': '0.07047'}
+{'loss': '0', 'grad_norm': '0', 'learning_rate': '5.249e-05', 'entropy': '0', 'num_tokens': '3.992e+05', 'mean_token_accuracy': '0', 'epoch': '0.07928'}
+{'loss': '0.06348', 'grad_norm': '0', 'learning_rate': '5.836e-05', 'entropy': '0.02372', 'num_tokens': '4.433e+05', 'mean_token_accuracy': '0.02333', 'epoch': '0.08809'}
+Traceback (most recent call last):
+  File "/home/ubuntu/final_project/train.py", line 304, in <module>
+    main()
+  File "/home/ubuntu/final_project/train.py", line 286, in main
+    trainer.train(resume_from_checkpoint=resume_ckpt)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/trainer.py", line 1427, in train
+    return inner_training_loop(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/trainer.py", line 1509, in _inner_training_loop
+    self._run_epoch(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/trainer.py", line 1778, in _run_epoch
+    self._maybe_log_save_evaluate(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/trainer.py", line 2084, in _maybe_log_save_evaluate
+    metrics = self._evaluate(trial, ignore_keys_for_eval)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/trainer.py", line 2995, in _evaluate
+    metrics = self.evaluate(ignore_keys=ignore_keys_for_eval)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/trainer.py", line 2582, in evaluate
+    output = self.evaluation_loop(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/trainer.py", line 2707, in evaluation_loop
+    losses, logits, labels = self.prediction_step(model, inputs, prediction_loss_only, ignore_keys=ignore_keys)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/trl/trainer/sft_trainer.py", line 1390, in prediction_step
+    return super().prediction_step(model, inputs, prediction_loss_only, ignore_keys=ignore_keys)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/trainer.py", line 2961, in prediction_step
+    loss, outputs = self.compute_loss(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/trl/trainer/sft_trainer.py", line 1283, in compute_loss
+    (loss, outputs) = super().compute_loss(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/trainer.py", line 1981, in compute_loss
+    outputs = model(**inputs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/accelerate/utils/operations.py", line 823, in forward
+    return model_forward(*args, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/accelerate/utils/operations.py", line 811, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/torch/amp/autocast_mode.py", line 44, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/peft/peft_model.py", line 1993, in forward
+    return self.base_model(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 330, in forward
+    return self.model.forward(*args, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/utils/generic.py", line 900, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 479, in forward
+    loss = self.loss_function(logits=logits, labels=labels, vocab_size=self.config.vocab_size, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/loss/loss_utils.py", line 67, in ForCausalLMLoss
+    loss = fixed_cross_entropy(logits, shift_labels, num_items_in_batch, ignore_index, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/loss/loss_utils.py", line 37, in fixed_cross_entropy
+    loss = nn.functional.cross_entropy(source, target, ignore_index=ignore_index, reduction=reduction)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/torch/nn/functional.py", line 3504, in cross_entropy
+    return torch._C._nn.cross_entropy_loss(
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 9.27 GiB. GPU 0 has a total capacity of 22.03 GiB of which 6.11 GiB is free. Including non-PyTorch memory, this process has 15.92 GiB memory in use. Of the allocated memory 15.57 GiB is allocated by PyTorch, and 115.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+  1%|          | 200/22710 [06:39<12:29:24,  2.00s/it]
+ERROR conda.cli.main_run:execute(148): `conda run python train.py --dataset_dir ./data/processed/dataset_baseline_ctx20 --model_name /opt/dlami/nvme/models/qwen2.5-coder-1.5b --output_dir /opt/dlami/nvme/ckpts/baseline_ctx20_qwen2.5-coder-1.5b --batch_size 2 --gradient_accumulation_steps 2 --num_epochs 10 --learning_rate 2e-4 --max_seq_length 2048 --lora_r 16 --lora_alpha 32 --lora_dropout 0.05 --eval_steps 200 --early_stopping_patience 3 --seed 42` failed. (See above for error)

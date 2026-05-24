@@ -22,6 +22,7 @@ Usage:
 
 import argparse
 import os
+import shutil
 
 import torch
 from datasets import load_from_disk
@@ -34,6 +35,7 @@ from transformers import (
     AutoTokenizer,
     BitsAndBytesConfig,
     EarlyStoppingCallback,
+    TrainerCallback,
     PreTrainedTokenizerBase,
 )
 from transformers.trainer_utils import get_last_checkpoint
@@ -45,27 +47,46 @@ class DataCollatorForCompletionOnlyLM:
     tokenizer: PreTrainedTokenizerBase
     max_length: int = 1024
 
+    def find_response_start(self, ids: torch.Tensor | list[int]) -> int | None:
+        if isinstance(ids, torch.Tensor):
+            ids = ids.tolist()
+        for j in range(len(ids) - len(self.response_template) + 1):
+            if ids[j : j + len(self.response_template)] == self.response_template:
+                return j + len(self.response_template)
+        return None
+
     def __call__(self, features: list[dict[str, Any]]) -> dict[str, torch.Tensor]:
         batch_ids = [torch.tensor(f["input_ids"][:self.max_length], dtype=torch.long) for f in features]
         max_len = max(len(ids) for ids in batch_ids)
         pad_id = self.tokenizer.pad_token_id
 
         all_input_ids, all_attn, all_labels = [], [], []
-        for ids in batch_ids:
-            # find first occurrence of the response template
-            start_idx = None
-            for j in range(len(ids) - len(self.response_template) + 1):
-                if ids[j : j + len(self.response_template)].tolist() == self.response_template:
-                    start_idx = j + len(self.response_template)
-                    break
+        missing = 0
+        for feature, ids in zip(features, batch_ids):
+            start_idx = feature.get("response_start")
+            if start_idx is not None:
+                start_idx = int(start_idx)
+                if start_idx < 0 or start_idx >= len(ids):
+                    start_idx = None
+            if start_idx is None:
+                start_idx = self.find_response_start(ids)
+            if start_idx is None:
+                missing += 1
+                start_idx = len(ids)
 
             lbl = ids.clone()
-            lbl[: start_idx if start_idx is not None else len(lbl)] = -100
+            lbl[:start_idx] = -100
 
             pad = max_len - len(ids)
             all_input_ids.append(torch.cat([ids, ids.new_full((pad,), pad_id)]))
             all_attn.append(torch.cat([torch.ones(len(ids), dtype=torch.long), torch.zeros(pad, dtype=torch.long)]))
             all_labels.append(torch.cat([lbl, lbl.new_full((pad,), -100)]))
+
+        if missing:
+            raise ValueError(
+                f"Response template not found in {missing}/{len(batch_ids)} batch samples. "
+                "Check RESPONSE_TEMPLATE/tokenizer compatibility."
+            )
 
         return {
             "input_ids": torch.stack(all_input_ids),
@@ -73,6 +94,75 @@ class DataCollatorForCompletionOnlyLM:
             "labels": torch.stack(all_labels),
         }
 from trl import SFTConfig, SFTTrainer
+
+
+def local_mirror_dir(output_dir: str) -> str | None:
+    marker = "/opt/dlami/nvme/ckpts/"
+    if not output_dir.startswith(marker):
+        return None
+    rel = output_dir[len(marker):].rstrip("/")
+    if not rel:
+        return None
+    return os.path.join("./ckpts", rel)
+
+
+def mirror_checkpoint_dir(output_dir: str) -> None:
+    dst = local_mirror_dir(output_dir)
+    if dst is None or not os.path.isdir(output_dir):
+        return
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    tmp_dst = f"{dst}.tmp"
+    if os.path.exists(tmp_dst):
+        shutil.rmtree(tmp_dst)
+    shutil.copytree(output_dir, tmp_dst, dirs_exist_ok=True)
+    if os.path.exists(dst):
+        shutil.rmtree(dst)
+    os.replace(tmp_dst, dst)
+    print(f"[Mirror] {output_dir} -> {dst}")
+
+
+
+
+def validate_response_masking(dataset, collator: DataCollatorForCompletionOnlyLM, name: str, limit: int = 200) -> None:
+    n = min(limit, len(dataset))
+    found = 0
+    supervised_tokens = []
+    lengths = []
+    for sample in dataset.select(range(n)):
+        ids = sample["input_ids"][: collator.max_length]
+        start_idx = sample.get("response_start")
+        if start_idx is not None:
+            start_idx = int(start_idx)
+            if start_idx < 0 or start_idx >= len(ids):
+                start_idx = None
+        if start_idx is None:
+            start_idx = collator.find_response_start(ids)
+        lengths.append(len(ids))
+        if start_idx is not None:
+            found += 1
+            supervised_tokens.append(max(len(ids) - start_idx, 0))
+        else:
+            supervised_tokens.append(0)
+
+    avg_len = sum(lengths) / n if n else 0.0
+    avg_supervised = sum(supervised_tokens) / n if n else 0.0
+    min_supervised = min(supervised_tokens) if supervised_tokens else 0
+    max_supervised = max(supervised_tokens) if supervised_tokens else 0
+    print(
+        f"  Response marker match ({name}): {found}/{n} "
+        f"avg_len={avg_len:.1f} avg_supervised_tokens={avg_supervised:.1f} "
+        f"range=({min_supervised}, {max_supervised})"
+    )
+    if found != n or avg_supervised <= 0:
+        raise ValueError(
+            f"Response marker validation failed for {name}: "
+            f"matched {found}/{n}, avg_supervised_tokens={avg_supervised:.1f}"
+        )
+
+class LocalCheckpointMirrorCallback(TrainerCallback):
+    def on_save(self, args, state, control, **kwargs):
+        mirror_checkpoint_dir(args.output_dir)
+        return control
 
 
 def parse_args():
@@ -93,6 +183,7 @@ def parse_args():
     # Training
     parser.add_argument("--num_epochs", type=int, default=10)
     parser.add_argument("--batch_size", type=int, default=4)
+    parser.add_argument("--eval_batch_size", type=int, default=1)
     parser.add_argument("--gradient_accumulation_steps", type=int, default=2)
     parser.add_argument("--learning_rate", type=float, default=2e-4)
     parser.add_argument("--max_seq_length", type=int, default=1024)
@@ -127,14 +218,15 @@ def main():
     print(f"Dataset:        {args.dataset_dir}")
     print(f"Output dir:     {args.output_dir}")
     print(f"Effective batch size: {args.batch_size * args.gradient_accumulation_steps}")
+    print(f"Eval batch size: {args.eval_batch_size}")
     print(f"Max seq length: {args.max_seq_length}")
     print()
 
     # ── 1. Dataset 로드 ───────────────────────────────────────────
     print("Loading dataset...")
     dataset = load_from_disk(args.dataset_dir)
-    train_ds = dataset["train"].select_columns(["text"])
-    val_ds = dataset["val"].select_columns(["text"])
+    train_ds = dataset["train"].select_columns(["text", "prompt"])
+    val_ds = dataset["val"].select_columns(["text", "prompt"])
     print(f"  Train: {len(train_ds)} samples")
     print(f"  Val:   {len(val_ds)} samples")
 
@@ -148,17 +240,40 @@ def main():
 
     print("Tokenizing dataset (truncation applied here)...")
     def tokenize_fn(examples):
-        return tokenizer(
+        encoded = tokenizer(
             examples["text"],
             truncation=True,
             max_length=args.max_seq_length,
             padding=False,
             add_special_tokens=True,
+            return_offsets_mapping=True,
         )
-    train_ds = train_ds.map(tokenize_fn, batched=True, remove_columns=["text"],
+        response_starts = []
+        for offsets, prompt in zip(encoded["offset_mapping"], examples["prompt"]):
+            prompt_end = len(prompt)
+            start_idx = None
+            for i, (start, end) in enumerate(offsets):
+                if end > prompt_end:
+                    start_idx = i
+                    break
+            response_starts.append(-1 if start_idx is None else start_idx)
+        encoded.pop("offset_mapping")
+        encoded["response_start"] = response_starts
+        return encoded
+    train_ds = train_ds.map(tokenize_fn, batched=True, remove_columns=["text", "prompt"],
                             num_proc=4, desc="  Train")
-    val_ds = val_ds.map(tokenize_fn, batched=True, remove_columns=["text"],
+    val_ds = val_ds.map(tokenize_fn, batched=True, remove_columns=["text", "prompt"],
                         num_proc=4, desc="  Val")
+
+    train_before, val_before = len(train_ds), len(val_ds)
+    train_ds = train_ds.filter(lambda x: x["response_start"] >= 0, desc="  Train filter")
+    val_ds = val_ds.filter(lambda x: x["response_start"] >= 0, desc="  Val filter")
+    print(
+        f"  Filtered samples without visible response tokens: "
+        f"train {train_before - len(train_ds)}, val {val_before - len(val_ds)}"
+    )
+    if len(train_ds) == 0 or len(val_ds) == 0:
+        raise ValueError("No train/val samples have response tokens after truncation.")
     print(f"  Tokenized. Train max tokens: {max(len(x) for x in train_ds['input_ids'])}")
 
     # ── 3. Quantization config (4-bit) ───────────────────────────
@@ -186,6 +301,7 @@ def main():
         dtype=torch.bfloat16,
         trust_remote_code=True,
     )
+    model.config.use_cache = False
     model = prepare_model_for_kbit_training(model)
     print(f"  Attention: {attn_impl}")
     print(f"  Parameters: {model.num_parameters():,}")
@@ -207,6 +323,7 @@ def main():
     training_args = SFTConfig(
         output_dir=args.output_dir,
         per_device_train_batch_size=args.batch_size,
+        per_device_eval_batch_size=args.eval_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         num_train_epochs=args.num_epochs,
         learning_rate=args.learning_rate,
@@ -221,7 +338,7 @@ def main():
         eval_steps=args.eval_steps,
         save_strategy="steps",
         save_steps=args.eval_steps,
-        save_total_limit=1,
+        save_total_limit=3,
         load_best_model_at_end=True,
         metric_for_best_model="eval_loss",
         greater_is_better=False,
@@ -237,7 +354,7 @@ def main():
     # ── 7. Completion-only loss masking ────────────────────────────
     # "// Resolution\n" 이후 토큰만 loss 계산, 프롬프트 부분은 마스킹 (-100)
     # packing=True일 때는 collator 사용 불가 → packing 끄고 collator 사용
-    RESPONSE_TEMPLATE = "\n// Resolution\n"
+    RESPONSE_TEMPLATE = "// Resolution\n"
     response_token_ids = tokenizer.encode(RESPONSE_TEMPLATE, add_special_tokens=False)
     collator = DataCollatorForCompletionOnlyLM(
         response_template=response_token_ids,
@@ -245,10 +362,13 @@ def main():
         max_length=args.max_seq_length,
     )
 
-    # ── 8. SFTTrainer ────────────────────────────────────────────
-    print("Initializing trainer...")
     print(f"  Response template: {repr(RESPONSE_TEMPLATE)}")
     print(f"  Response token ids: {response_token_ids}")
+    validate_response_masking(train_ds, collator, "train")
+    validate_response_masking(val_ds, collator, "val")
+
+    # ── 8. SFTTrainer ────────────────────────────────────────────
+    print("Initializing trainer...")
     trainer = SFTTrainer(
         model=model,
         args=training_args,
@@ -260,7 +380,8 @@ def main():
         callbacks=[
             EarlyStoppingCallback(
                 early_stopping_patience=args.early_stopping_patience
-            )
+            ),
+            LocalCheckpointMirrorCallback(),
         ],
     )
 
@@ -297,6 +418,7 @@ def main():
     print(f"\nFinal eval metrics: {metrics}")
 
     trainer.save_state()
+    mirror_checkpoint_dir(args.output_dir)
     print("Training complete!")
 
 

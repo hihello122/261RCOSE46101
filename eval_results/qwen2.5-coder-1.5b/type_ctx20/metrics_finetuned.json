@@ -1,0 +1,33 @@
+{
+  "model": "./ckpts/type_ctx20_qwen2.5-coder-1.5b/final",
+  "split": "test",
+  "overall": {
+    "total_samples": 81,
+    "exact_match_rate": 0.0,
+    "avg_bleu": 0.10280946465443842,
+    "avg_codebleu": 0.538726353332459,
+    "avg_token_f1": 0.1832906024024045,
+    "avg_chrf": 0.20243166524105013,
+    "avg_edit_distance": 0.866487623751242
+  },
+  "per_project": {
+    "eclipse": {
+      "count": 2,
+      "exact_match_rate": 0.0,
+      "avg_bleu": 0.16379253266499272,
+      "avg_codebleu": 0.6847750899750179,
+      "avg_token_f1": 0.25597862957937584,
+      "avg_chrf": 0.2684275500178564,
+      "avg_edit_distance": 0.8722718366974984
+    },
+    "netty": {
+      "count": 79,
+      "exact_match_rate": 0.0,
+      "avg_bleu": 0.10126558951493074,
+      "avg_codebleu": 0.5350289169617612,
+      "avg_token_f1": 0.1814503991827343,
+      "avg_chrf": 0.20076088334796646,
+      "avg_edit_distance": 0.8663411879804507
+    }
+  }
+}

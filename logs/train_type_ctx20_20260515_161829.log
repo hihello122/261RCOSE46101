@@ -1,0 +1,50 @@
+========================================
+ ConGra QLoRA Training
+========================================
+ Mode:          type
+ Model:         /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+ Model tag:     qwen2.5-coder-1.5b
+ Dataset:       ./data/processed/dataset_type_ctx20
+ Output:        /opt/dlami/nvme/ckpts/type_ctx20_qwen2.5-coder-1.5b
+ Batch:         1 x 4 = 4
+ Eval batch:    1
+ LR:            2e-4
+ Epochs:        10 (patience=3)
+ Max seq len:   2048
+ LoRA:          r=16, alpha=32
+ WandB:         false
+========================================
+
+Model:          /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+Dataset:        ./data/processed/dataset_type_ctx20
+Output dir:     /opt/dlami/nvme/ckpts/type_ctx20_qwen2.5-coder-1.5b
+Effective batch size: 4
+Eval batch size: 1
+Max seq length: 2048
+
+Loading dataset...
+  Train: 9082 samples
+  Val:   289 samples
+Loading tokenizer...
+Tokenizing dataset (truncation applied here)...
+  Train (num_proc=4):   0%|          | 0/9082 [00:00<?, ? examples/s]  Train (num_proc=4):  11%|█         | 1000/9082 [00:05<00:48, 167.84 examples/s]  Train (num_proc=4):  22%|██▏       | 2000/9082 [00:06<00:21, 332.63 examples/s]  Train (num_proc=4):  33%|███▎      | 3000/9082 [00:07<00:11, 540.05 examples/s]  Train (num_proc=4):  44%|████▍     | 4000/9082 [00:08<00:06, 727.49 examples/s]  Train (num_proc=4):  47%|████▋     | 4271/9082 [00:08<00:07, 665.34 examples/s]  Train (num_proc=4):  58%|█████▊    | 5271/9082 [00:09<00:04, 862.08 examples/s]  Train (num_proc=4):  69%|██████▉   | 6271/9082 [00:09<00:02, 1285.38 examples/s]  Train (num_proc=4):  80%|████████  | 7271/9082 [00:09<00:00, 1818.48 examples/s]  Train (num_proc=4):  86%|████████▌ | 7812/9082 [00:10<00:00, 1645.34 examples/s]  Train (num_proc=4):  97%|█████████▋| 8812/9082 [00:10<00:00, 1382.17 examples/s]  Train (num_proc=4): 100%|██████████| 9082/9082 [00:11<00:00, 791.26 examples/s] 
+  Val (num_proc=4):   0%|          | 0/289 [00:00<?, ? examples/s]  Val (num_proc=4):  25%|██▌       | 73/289 [00:02<00:06, 34.36 examples/s]  Val (num_proc=4):  50%|█████     | 145/289 [00:03<00:03, 43.05 examples/s]  Val (num_proc=4):  75%|███████▌  | 217/289 [00:04<00:01, 45.69 examples/s]  Val (num_proc=4): 100%|██████████| 289/289 [00:06<00:00, 47.44 examples/s]  Val (num_proc=4): 100%|██████████| 289/289 [00:06<00:00, 44.42 examples/s]
+  Tokenized. Train max tokens: 2048
+Loading model...
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:213: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Loading weights:   4%|▍         | 15/338 [00:00<00:02, 146.20it/s]Loading weights:  33%|███▎      | 113/338 [00:00<00:00, 621.78it/s]Loading weights:  64%|██████▍   | 216/338 [00:00<00:00, 805.24it/s]Loading weights:  93%|█████████▎| 315/338 [00:00<00:00, 873.47it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 789.15it/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+  Attention: sdpa
+  Parameters: 1,543,714,304
+Initializing trainer...
+  Response template: '\n// Resolution\n'
+  Response token ids: [198, 322, 37116, 198]
+[Checkpoint] 기존 체크포인트 없음 → 처음부터 학습
+
+Starting training...
+  Epochs: 10 (with early stopping, patience=3)
+  Batch: 1 x 4 = 4
+
+  0%|          | 0/22710 [00:00<?, ?it/s]  0%|          | 1/22710 [00:02<14:52:12,  2.36s/it]  0%|          | 2/22710 [00:04<14:33:12,  2.31s/it]  0%|          | 3/22710 [00:06<13:06:01,  2.08s/it]  0%|          | 4/22710 [00:09<15:18:41,  2.43s/it]  0%|          | 5/22710 [00:11<15:02:41,  2.39s/it]  0%|          | 6/22710 [00:14<16:06:34,  2.55s/it]  0%|          | 7/22710 [00:16<15:17:02,  2.42s/it]

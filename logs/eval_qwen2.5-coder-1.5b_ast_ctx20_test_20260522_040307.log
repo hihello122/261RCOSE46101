@@ -1,0 +1,113 @@
+========================================
+ ConGra Evaluation
+========================================
+ Mode:        ast
+ Model tag:   qwen2.5-coder-1.5b
+ Model:       ./ckpts/ast_ctx20_qwen2.5-coder-1.5b/final
+ Base model:  /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+ Dataset:     ./data/processed/dataset_ast_ctx20
+ Split:       test
+ Max tokens:  512
+ Output:      ./eval_results/qwen2.5-coder-1.5b/ast_ctx20
+========================================
+
+Loading dataset...
+  test: 81 samples
+Loading base model: /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:213: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Loading weights:   4%|▍         | 13/338 [00:00<00:02, 129.52it/s]Loading weights:  33%|███▎      | 112/338 [00:00<00:00, 626.53it/s]Loading weights:  63%|██████▎   | 212/338 [00:00<00:00, 793.96it/s]Loading weights:  93%|█████████▎| 315/338 [00:00<00:00, 877.83it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 790.40it/s]
+Loading LoRA adapter: ./ckpts/ast_ctx20_qwen2.5-coder-1.5b/final
+
+Generating resolutions (max_new_tokens=512)...
+Evaluating:   0%|          | 0/81 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:468: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Evaluating:   1%|          | 1/81 [00:45<1:00:33, 45.41s/it]Evaluating:   2%|▏         | 2/81 [01:30<59:28, 45.17s/it]  Evaluating:   4%|▎         | 3/81 [02:15<58:37, 45.10s/it]Evaluating:   5%|▍         | 4/81 [03:00<57:52, 45.10s/it]Evaluating:   6%|▌         | 5/81 [03:45<57:05, 45.08s/it]Evaluating:   7%|▋         | 6/81 [04:30<56:17, 45.03s/it]Evaluating:   9%|▊         | 7/81 [05:15<55:24, 44.92s/it]Evaluating:  10%|▉         | 8/81 [06:00<54:40, 44.93s/it]Evaluating:  11%|█         | 9/81 [06:45<54:14, 45.19s/it]Evaluating:  12%|█▏        | 10/81 [07:30<53:20, 45.08s/it]Evaluating:  14%|█▎        | 11/81 [07:39<39:42, 34.03s/it]Evaluating:  15%|█▍        | 12/81 [08:24<42:54, 37.31s/it]Evaluating:  16%|█▌        | 13/81 [09:09<44:49, 39.55s/it]Evaluating:  17%|█▋        | 14/81 [09:33<38:55, 34.86s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  19%|█▊        | 15/81 [10:17<41:36, 37.83s/it]Evaluating:  20%|█▉        | 16/81 [10:38<35:29, 32.76s/it]Evaluating:  21%|██        | 17/81 [11:23<38:52, 36.44s/it]Evaluating:  22%|██▏       | 18/81 [11:59<37:50, 36.04s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  23%|██▎       | 19/81 [12:43<39:57, 38.66s/it]Evaluating:  25%|██▍       | 20/81 [13:28<41:14, 40.57s/it]Evaluating:  26%|██▌       | 21/81 [14:13<41:54, 41.91s/it]Evaluating:  27%|██▋       | 22/81 [15:00<42:34, 43.30s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  28%|██▊       | 23/81 [15:45<42:17, 43.74s/it]Evaluating:  30%|██▉       | 24/81 [16:30<41:55, 44.14s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  31%|███       | 25/81 [17:15<41:24, 44.36s/it]Evaluating:  32%|███▏      | 26/81 [18:00<40:51, 44.57s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  33%|███▎      | 27/81 [18:44<40:08, 44.60s/it]Evaluating:  35%|███▍      | 28/81 [19:29<39:29, 44.71s/it]Evaluating:  36%|███▌      | 29/81 [20:16<39:10, 45.20s/it]Evaluating:  37%|███▋      | 30/81 [21:01<38:24, 45.20s/it]Evaluating:  38%|███▊      | 31/81 [21:46<37:37, 45.16s/it]Evaluating:  40%|███▉      | 32/81 [22:31<36:47, 45.05s/it]Evaluating:  41%|████      | 33/81 [23:16<36:03, 45.08s/it]Evaluating:  42%|████▏     | 34/81 [23:20<25:35, 32.68s/it]Evaluating:  43%|████▎     | 35/81 [24:05<27:53, 36.37s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  44%|████▍     | 36/81 [24:49<29:11, 38.92s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  46%|████▌     | 37/81 [25:35<29:53, 40.76s/it]Evaluating:  47%|████▋     | 38/81 [26:20<30:08, 42.06s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  48%|████▊     | 39/81 [27:04<29:59, 42.85s/it]Evaluating:  49%|████▉     | 40/81 [27:49<29:40, 43.44s/it]Evaluating:  51%|█████     | 41/81 [28:34<29:14, 43.85s/it]Evaluating:  52%|█████▏    | 42/81 [29:20<29:01, 44.64s/it]Evaluating:  53%|█████▎    | 43/81 [30:06<28:25, 44.89s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  54%|█████▍    | 44/81 [30:51<27:40, 44.87s/it]Evaluating:  56%|█████▌    | 45/81 [31:36<27:02, 45.08s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  57%|█████▋    | 46/81 [32:21<26:16, 45.05s/it]Evaluating:  58%|█████▊    | 47/81 [32:29<19:05, 33.70s/it]Evaluating:  59%|█████▉    | 48/81 [33:14<20:25, 37.12s/it]Evaluating:  60%|██████    | 49/81 [33:59<21:07, 39.60s/it]Evaluating:  62%|██████▏   | 50/81 [34:14<16:38, 32.20s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  63%|██████▎   | 51/81 [34:59<18:01, 36.06s/it]Evaluating:  64%|██████▍   | 52/81 [35:44<18:45, 38.80s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  65%|██████▌   | 53/81 [36:02<15:11, 32.57s/it]Evaluating:  67%|██████▋   | 54/81 [36:47<16:20, 36.30s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  68%|██████▊   | 55/81 [37:32<16:52, 38.95s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  69%|██████▉   | 56/81 [38:17<16:58, 40.73s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  70%|███████   | 57/81 [38:38<13:51, 34.66s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  72%|███████▏  | 58/81 [39:23<14:29, 37.81s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  73%|███████▎  | 59/81 [40:08<14:38, 39.92s/it]Evaluating:  74%|███████▍  | 60/81 [40:53<14:32, 41.52s/it]Evaluating:  75%|███████▌  | 61/81 [41:38<14:11, 42.60s/it]Evaluating:  77%|███████▋  | 62/81 [42:23<13:43, 43.34s/it]Evaluating:  78%|███████▊  | 63/81 [43:09<13:13, 44.08s/it]Evaluating:  79%|███████▉  | 64/81 [43:54<12:35, 44.42s/it]Evaluating:  80%|████████  | 65/81 [44:40<11:55, 44.71s/it]Evaluating:  81%|████████▏ | 66/81 [45:25<11:12, 44.80s/it]Evaluating:  83%|████████▎ | 67/81 [46:10<10:29, 44.93s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  84%|████████▍ | 68/81 [46:55<09:45, 45.01s/it]Evaluating:  85%|████████▌ | 69/81 [47:40<09:00, 45.07s/it]Evaluating:  86%|████████▋ | 70/81 [48:25<08:15, 45.03s/it]Evaluating:  88%|████████▊ | 71/81 [49:10<07:30, 45.03s/it]Evaluating:  89%|████████▉ | 72/81 [49:55<06:45, 45.08s/it]Evaluating:  90%|█████████ | 73/81 [50:41<06:02, 45.29s/it]Evaluating:  91%|█████████▏| 74/81 [51:26<05:16, 45.28s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  93%|█████████▎| 75/81 [52:12<04:31, 45.29s/it]Evaluating:  94%|█████████▍| 76/81 [52:57<03:45, 45.15s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  95%|█████████▌| 77/81 [53:41<03:00, 45.05s/it]WARNING:root:WARNING: There is no reference data-flows extracted from the whole corpus, and the data-flow match score degenerates to 0. Please consider ignoring this score.
+Evaluating:  96%|█████████▋| 78/81 [54:27<02:15, 45.11s/it]Evaluating:  98%|█████████▊| 79/81 [55:12<01:30, 45.09s/it]Evaluating:  99%|█████████▉| 80/81 [55:57<00:45, 45.01s/it]Evaluating: 100%|██████████| 81/81 [56:41<00:00, 44.94s/it]Evaluating: 100%|██████████| 81/81 [56:41<00:00, 42.00s/it]
+
+============================================================
+Overall Results
+============================================================
+  Samples:        81
+  Exact Match:    0.0000
+  BLEU:           0.1022
+  CodeBLEU:       0.5525
+  Token-F1:       0.1842
+  chrF:           0.2011
+  Edit Distance:  0.8695
+
+Per-project Results:
+  eclipse               n=   2  EM=0.000  BLEU=0.183  CodeBLEU=0.678  F1=0.306  chrF=0.304  ED=0.799
+  netty                 n=  79  EM=0.000  BLEU=0.100  CodeBLEU=0.549  F1=0.181  chrF=0.198  ED=0.871
+
+Metrics saved to eval_results/qwen2.5-coder-1.5b/ast_ctx20/metrics_finetuned.json
+Predictions saved to eval_results/qwen2.5-coder-1.5b/ast_ctx20/predictions_finetuned.jsonl
+
+Closest failures (lowest edit distance, top 5):
+  [netty/DetectionUtil.java] ED=0.049 BLEU=0.936 F1=0.966 chrF=0.973
+    Gold: /*
+ * Copyright 2011 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the A...
+    Pred: /*
+ * Copyright 2011 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the A...
+
+  [netty/QueueFactory.java] ED=0.330 BLEU=0.693 F1=0.794 chrF=0.808
+    Gold: /*
+ * Copyright 2011 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the A...
+    Pred: /*
+ * Copyright 2011 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the A...
+
+  [netty/WebSocket08FrameDecoder.java] ED=0.453 BLEU=0.541 F1=0.702 chrF=0.707
+    Gold: }
+    protected void checkCloseFrameBody(ChannelInboundHandlerContext<Byte> ctx, ChannelBuffer buffe...
+    Pred: }
+    protected void checkCloseFrameBody(ChannelInboundHandlerContext<Byte> ctx, ChannelBuffer buffe...
+
+  [netty/HttpUploadServerHandler.java] ED=0.582 BLEU=0.000 F1=0.431 chrF=0.476
+    Gold: throws Exception {
+        e.cause().printStackTrace();
+        System.err.println(responseContent.t...
+    Pred: logger.error(responseContent.toString(), e.getCause());
+        e.getChannel().close();
+    }
+}
+<|fi...
+
+  [netty/Http2ClientInitializer.java] ED=0.610 BLEU=0.527 F1=0.686 chrF=0.722
+    Gold: ch.pipeline().addLast(sslCtx.newHandler(ch.alloc()), connectionHandler);
+    }
+    /**
+     * Config...
+    Pred: public Http2ClientInitializer(boolean ssl) {
+        this.ssl = ssl;
+        this.sslCtx = new SslCo...
+
+
+Results saved to: ./eval_results/qwen2.5-coder-1.5b/ast_ctx20/

@@ -1,0 +1,92 @@
+========================================
+ ConGra Evaluation
+========================================
+ Mode:        type
+ Model tag:   qwen2.5-coder-1.5b
+ Model:       ./ckpts/type_ctx20_qwen2.5-coder-1.5b/final
+ Base model:  /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+ Dataset:     ./data/processed/dataset_type_ctx20
+ Split:       test
+ Max tokens:  512
+ Output:      ./eval_results/qwen2.5-coder-1.5b/type_ctx20
+========================================
+
+Loading dataset...
+  test: 81 samples
+Loading base model: /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:213: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Loading weights:   4%|▍         | 15/338 [00:00<00:02, 148.20it/s]Loading weights:  33%|███▎      | 113/338 [00:00<00:00, 625.85it/s]Loading weights:  64%|██████▍   | 216/338 [00:00<00:00, 807.81it/s]Loading weights:  93%|█████████▎| 315/338 [00:00<00:00, 875.64it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 791.31it/s]
+Loading LoRA adapter: ./ckpts/type_ctx20_qwen2.5-coder-1.5b/final
+
+Generating resolutions (max_new_tokens=512)...
+Evaluating:   0%|          | 0/81 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:468: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Evaluating:   1%|          | 1/81 [00:44<58:56, 44.20s/it]Evaluating:   2%|▏         | 2/81 [01:28<58:13, 44.22s/it]Evaluating:   4%|▎         | 3/81 [02:12<57:31, 44.25s/it]Evaluating:   5%|▍         | 4/81 [02:56<56:44, 44.21s/it]Evaluating:   6%|▌         | 5/81 [03:41<56:10, 44.34s/it]Evaluating:   7%|▋         | 6/81 [04:25<55:29, 44.39s/it]Evaluating:   9%|▊         | 7/81 [05:10<54:55, 44.53s/it]Evaluating:  10%|▉         | 8/81 [05:55<54:06, 44.48s/it]Evaluating:  11%|█         | 9/81 [06:39<53:30, 44.59s/it]Evaluating:  12%|█▏        | 10/81 [07:23<52:29, 44.37s/it]Evaluating:  14%|█▎        | 11/81 [08:09<52:05, 44.65s/it]Evaluating:  15%|█▍        | 12/81 [08:53<51:08, 44.47s/it]Evaluating:  16%|█▌        | 13/81 [09:37<50:27, 44.52s/it]Evaluating:  17%|█▋        | 14/81 [10:22<49:39, 44.48s/it]Evaluating:  19%|█▊        | 15/81 [11:06<48:47, 44.35s/it]Evaluating:  20%|█▉        | 16/81 [11:50<47:51, 44.18s/it]Evaluating:  21%|██        | 17/81 [12:33<47:00, 44.06s/it]Evaluating:  22%|██▏       | 18/81 [13:17<46:09, 43.96s/it]Evaluating:  23%|██▎       | 19/81 [14:01<45:23, 43.94s/it]Evaluating:  25%|██▍       | 20/81 [14:45<44:45, 44.03s/it]Evaluating:  26%|██▌       | 21/81 [15:29<43:58, 43.98s/it]Evaluating:  27%|██▋       | 22/81 [16:14<43:40, 44.41s/it]Evaluating:  28%|██▊       | 23/81 [16:58<42:46, 44.25s/it]Evaluating:  30%|██▉       | 24/81 [17:42<41:56, 44.15s/it]Evaluating:  31%|███       | 25/81 [18:26<41:06, 44.04s/it]Evaluating:  32%|███▏      | 26/81 [19:10<40:27, 44.14s/it]Evaluating:  33%|███▎      | 27/81 [19:55<39:44, 44.15s/it]Evaluating:  35%|███▍      | 28/81 [20:39<39:04, 44.24s/it]Evaluating:  36%|███▌      | 29/81 [21:25<38:41, 44.65s/it]Evaluating:  37%|███▋      | 30/81 [22:08<37:44, 44.41s/it]Evaluating:  38%|███▊      | 31/81 [22:53<36:57, 44.35s/it]Evaluating:  40%|███▉      | 32/81 [23:37<36:08, 44.26s/it]Evaluating:  41%|████      | 33/81 [24:21<35:29, 44.37s/it]Evaluating:  42%|████▏     | 34/81 [25:06<34:48, 44.43s/it]Evaluating:  43%|████▎     | 35/81 [25:50<34:02, 44.39s/it]Evaluating:  44%|████▍     | 36/81 [26:34<33:13, 44.30s/it]Evaluating:  46%|████▌     | 37/81 [27:18<32:24, 44.18s/it]Evaluating:  47%|████▋     | 38/81 [28:03<31:41, 44.22s/it]Evaluating:  48%|████▊     | 39/81 [28:46<30:52, 44.11s/it]Evaluating:  49%|████▉     | 40/81 [29:30<30:06, 44.06s/it]Evaluating:  51%|█████     | 41/81 [30:14<29:20, 44.00s/it]Evaluating:  52%|█████▏    | 42/81 [30:59<28:43, 44.20s/it]Evaluating:  53%|█████▎    | 43/81 [31:44<28:05, 44.34s/it]Evaluating:  54%|█████▍    | 44/81 [32:28<27:18, 44.28s/it]Evaluating:  56%|█████▌    | 45/81 [33:12<26:39, 44.42s/it]Evaluating:  57%|█████▋    | 46/81 [33:56<25:47, 44.23s/it]Evaluating:  58%|█████▊    | 47/81 [34:40<24:59, 44.11s/it]Evaluating:  59%|█████▉    | 48/81 [35:24<24:14, 44.08s/it]Evaluating:  60%|██████    | 49/81 [36:08<23:31, 44.09s/it]Evaluating:  62%|██████▏   | 50/81 [36:52<22:42, 43.96s/it]Evaluating:  63%|██████▎   | 51/81 [37:36<21:58, 43.95s/it]Evaluating:  64%|██████▍   | 52/81 [38:19<21:11, 43.86s/it]Evaluating:  65%|██████▌   | 53/81 [39:03<20:28, 43.87s/it]Evaluating:  67%|██████▋   | 54/81 [39:47<19:45, 43.92s/it]Evaluating:  68%|██████▊   | 55/81 [40:31<19:01, 43.90s/it]Evaluating:  69%|██████▉   | 56/81 [41:15<18:18, 43.92s/it]Evaluating:  70%|███████   | 57/81 [41:59<17:34, 43.94s/it]Evaluating:  72%|███████▏  | 58/81 [42:43<16:50, 43.94s/it]Evaluating:  73%|███████▎  | 59/81 [43:27<16:08, 44.01s/it]Evaluating:  74%|███████▍  | 60/81 [44:11<15:23, 43.96s/it]Evaluating:  75%|███████▌  | 61/81 [44:55<14:38, 43.93s/it]Evaluating:  77%|███████▋  | 62/81 [45:39<13:54, 43.94s/it]Evaluating:  78%|███████▊  | 63/81 [46:23<13:13, 44.10s/it]Evaluating:  79%|███████▉  | 64/81 [47:07<12:29, 44.08s/it]Evaluating:  80%|████████  | 65/81 [47:51<11:45, 44.08s/it]Evaluating:  81%|████████▏ | 66/81 [48:36<11:03, 44.24s/it]Evaluating:  83%|████████▎ | 67/81 [49:20<10:19, 44.26s/it]Evaluating:  84%|████████▍ | 68/81 [50:05<09:36, 44.37s/it]Evaluating:  85%|████████▌ | 69/81 [50:50<08:54, 44.53s/it]Evaluating:  86%|████████▋ | 70/81 [51:34<08:08, 44.40s/it]Evaluating:  88%|████████▊ | 71/81 [52:18<07:22, 44.27s/it]Evaluating:  89%|████████▉ | 72/81 [53:03<06:39, 44.34s/it]Evaluating:  90%|█████████ | 73/81 [53:47<05:55, 44.38s/it]Evaluating:  91%|█████████▏| 74/81 [54:31<05:09, 44.23s/it]Evaluating:  93%|█████████▎| 75/81 [55:15<04:25, 44.23s/it]Evaluating:  94%|█████████▍| 76/81 [55:59<03:40, 44.11s/it]Evaluating:  95%|█████████▌| 77/81 [56:43<02:56, 44.03s/it]Evaluating:  96%|█████████▋| 78/81 [57:27<02:12, 44.06s/it]Evaluating:  98%|█████████▊| 79/81 [58:11<01:28, 44.16s/it]Evaluating:  99%|█████████▉| 80/81 [58:55<00:44, 44.07s/it]Evaluating: 100%|██████████| 81/81 [59:39<00:00, 44.01s/it]Evaluating: 100%|██████████| 81/81 [59:39<00:00, 44.19s/it]
+
+============================================================
+Overall Results
+============================================================
+  Samples:        81
+  Exact Match:    0.0000
+  BLEU:           0.0013
+  CodeBLEU:       0.0000
+  Token-F1:       0.0197
+  chrF:           0.0533
+  Edit Distance:  0.9386
+
+Per-project Results:
+  eclipse               n=   2  EM=0.000  BLEU=0.005  CodeBLEU=0.000  F1=0.042  chrF=0.081  ED=0.887
+  netty                 n=  79  EM=0.000  BLEU=0.001  CodeBLEU=0.000  F1=0.019  chrF=0.053  ED=0.940
+
+Metrics saved to eval_results/qwen2.5-coder-1.5b/type_ctx20/metrics_finetuned.json
+Predictions saved to eval_results/qwen2.5-coder-1.5b/type_ctx20/predictions_finetuned.jsonl
+
+Closest failures (lowest edit distance, top 5):
+  [netty/SpdySessionHandler.java] ED=0.736 BLEU=0.024 F1=0.124 chrF=0.286
+    Gold: @Override
+    public void disconnect(final ChannelOutboundHandlerContext<Object> ctx,
+            fi...
+    Pred: /stubbed-off method
+  of the following method is overridden
+    at stubbedOutMethodOfSuper
+         ...
+
+  [netty/DetectionUtil.java] ED=0.778 BLEU=0.000 F1=0.044 chrF=0.179
+    Gold: /*
+ * Copyright 2011 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the A...
+    Pred: try {
+   	   		Class.forName("com.abc");
+   	   		}catch(ClassNotFoundException e){
+   	   		}catch(...
+
+  [eclipse/ThemeEngine.java] ED=0.830 BLEU=0.009 F1=0.081 chrF=0.113
+    Gold: System.getProperty("user.home") + System.getProperty("file.separator") + ".e4css" + System.getProper...
+    Pred: final(String.valueOf())
+		(final()).doubleValue());
+		}
+		}catch (final() e){
+		}
+		}catch(final() e...
+
+  [netty/QueueFactory.java] ED=0.832 BLEU=0.023 F1=0.128 chrF=0.226
+    Gold: /*
+ * Copyright 2011 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the A...
+    Pred: LinkedTransferQueueLinkedBlockingQueue<T>() transferQueue = new LinkedTransferQueueLinkedBlockingQue...
+
+  [netty/Http2ClientInitializer.java] ED=0.855 BLEU=0.000 F1=0.062 chrF=0.122
+    Gold: ch.pipeline().addLast(sslCtx.newHandler(ch.alloc()), connectionHandler);
+    }
+    /**
+     * Config...
+    Pred: engine.setUse
+		(engine(),engine());
+		(engine(),engine().setUse(true/false));
+		.engine().setUse(fa...
+
+
+Results saved to: ./eval_results/qwen2.5-coder-1.5b/type_ctx20/

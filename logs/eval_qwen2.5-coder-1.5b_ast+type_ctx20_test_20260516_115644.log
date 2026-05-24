@@ -1,0 +1,108 @@
+
+[Model] Local model missing: /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+[Model] Restoring/downloading Qwen 1.5B to NVMe
+========================================
+ Coder Model Download
+========================================
+ Model:     Qwen/Qwen2.5-Coder-1.5B
+ Save to:   /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+========================================
+
+[INFO] /opt/dlami/nvme/models 여유 공간: 217GB (필요: 4GB)
+[INFO] 다운로드 시작... (xet 비활성화, 순차 다운로드)
+Downloading Qwen/Qwen2.5-Coder-1.5B → /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 10 files:  40%|████      | 4/10 [00:00<00:00, 31.51it/s]Fetching 10 files:  80%|████████  | 8/10 [00:10<00:02,  1.49s/it]Fetching 10 files: 100%|██████████| 10/10 [00:10<00:00,  1.03s/it]
+Download complete.
+
+[OK] 모델 다운로드 완료: /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+
+학습 시 아래와 같이 로컬 경로를 지정하세요:
+
+  # train.sh 사용 시
+  bash scripts/train.sh --model /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+
+  # 직접 실행 시
+  python3 train.py --model_name /opt/dlami/nvme/models/qwen2.5-coder-1.5b ...
+========================================
+ ConGra Evaluation
+========================================
+ Mode:        ast+type
+ Model tag:   qwen2.5-coder-1.5b
+ Model:       ./ckpts/ast+type_ctx20_qwen2.5-coder-1.5b/final
+ Base model:  /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+ Dataset:     ./data/processed/dataset_ast+type_ctx20
+ Split:       test
+ Max tokens:  512
+ Output:      ./eval_results/qwen2.5-coder-1.5b/ast+type_ctx20
+========================================
+
+Loading dataset...
+  test: 81 samples
+Loading base model: /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:213: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Loading weights:   1%|          | 3/338 [00:00<00:22, 14.75it/s]Loading weights:  30%|██▉       | 100/338 [00:00<00:00, 407.03it/s]Loading weights:  59%|█████▉    | 200/338 [00:00<00:00, 625.56it/s]Loading weights:  89%|████████▉ | 302/338 [00:00<00:00, 761.72it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 623.84it/s]
+Loading LoRA adapter: ./ckpts/ast+type_ctx20_qwen2.5-coder-1.5b/final
+
+Generating resolutions (max_new_tokens=512)...
+Evaluating:   0%|          | 0/81 [00:00<?, ?it/s]/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/bitsandbytes/backends/cuda/ops.py:468: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Evaluating:   1%|          | 1/81 [00:47<1:02:44, 47.06s/it]Evaluating:   2%|▏         | 2/81 [01:33<1:01:39, 46.83s/it]Evaluating:   4%|▎         | 3/81 [02:19<1:00:23, 46.46s/it]Evaluating:   5%|▍         | 4/81 [03:05<59:26, 46.31s/it]  Evaluating:   6%|▌         | 5/81 [03:52<58:47, 46.41s/it]Evaluating:   7%|▋         | 6/81 [04:38<58:02, 46.43s/it]Evaluating:   9%|▊         | 7/81 [05:25<57:19, 46.48s/it]Evaluating:  10%|▉         | 8/81 [06:11<56:21, 46.32s/it]Evaluating:  11%|█         | 9/81 [06:59<56:04, 46.73s/it]Evaluating:  12%|█▏        | 10/81 [07:45<55:20, 46.76s/it]Evaluating:  14%|█▎        | 11/81 [08:34<55:12, 47.32s/it]Evaluating:  15%|█▍        | 12/81 [09:20<54:04, 47.03s/it]Evaluating:  16%|█▌        | 13/81 [10:07<53:02, 46.80s/it]Evaluating:  17%|█▋        | 14/81 [10:53<52:04, 46.63s/it]Evaluating:  19%|█▊        | 15/81 [11:39<51:09, 46.51s/it]Evaluating:  20%|█▉        | 16/81 [12:25<50:20, 46.47s/it]Evaluating:  21%|██        | 17/81 [13:12<49:31, 46.42s/it]Evaluating:  22%|██▏       | 18/81 [13:58<48:42, 46.39s/it]Evaluating:  23%|██▎       | 19/81 [14:45<48:04, 46.53s/it]Evaluating:  25%|██▍       | 20/81 [15:31<47:16, 46.50s/it]Evaluating:  26%|██▌       | 21/81 [16:18<46:37, 46.63s/it]Evaluating:  27%|██▋       | 22/81 [17:07<46:26, 47.23s/it]Evaluating:  28%|██▊       | 23/81 [17:54<45:31, 47.10s/it]Evaluating:  30%|██▉       | 24/81 [18:41<44:42, 47.07s/it]Evaluating:  31%|███       | 25/81 [19:27<43:47, 46.91s/it]Evaluating:  32%|███▏      | 26/81 [20:14<42:54, 46.82s/it]Evaluating:  33%|███▎      | 27/81 [21:00<41:52, 46.53s/it]Evaluating:  35%|███▍      | 28/81 [21:46<41:05, 46.52s/it]Evaluating:  36%|███▌      | 29/81 [22:35<40:49, 47.10s/it]Evaluating:  37%|███▋      | 30/81 [23:21<39:50, 46.87s/it]Evaluating:  38%|███▊      | 31/81 [24:07<38:55, 46.72s/it]Evaluating:  40%|███▉      | 32/81 [24:54<38:03, 46.59s/it]Evaluating:  41%|████      | 33/81 [25:40<37:12, 46.50s/it]Evaluating:  42%|████▏     | 34/81 [26:26<36:21, 46.41s/it]Evaluating:  43%|████▎     | 35/81 [27:12<35:32, 46.36s/it]Evaluating:  44%|████▍     | 36/81 [27:59<34:42, 46.29s/it]Evaluating:  46%|████▌     | 37/81 [28:45<33:59, 46.35s/it]Evaluating:  47%|████▋     | 38/81 [29:32<33:19, 46.49s/it]Evaluating:  48%|████▊     | 39/81 [30:18<32:24, 46.30s/it]Evaluating:  49%|████▉     | 40/81 [31:04<31:35, 46.24s/it]Evaluating:  51%|█████     | 41/81 [31:50<30:54, 46.35s/it]Evaluating:  52%|█████▏    | 42/81 [32:39<30:34, 47.04s/it]Evaluating:  53%|█████▎    | 43/81 [33:26<29:47, 47.04s/it]Evaluating:  54%|█████▍    | 44/81 [34:12<28:52, 46.83s/it]Evaluating:  56%|█████▌    | 45/81 [35:00<28:10, 46.95s/it]Evaluating:  57%|█████▋    | 46/81 [35:46<27:19, 46.83s/it]Evaluating:  58%|█████▊    | 47/81 [36:32<26:25, 46.63s/it]Evaluating:  59%|█████▉    | 48/81 [37:19<25:34, 46.51s/it]Evaluating:  60%|██████    | 49/81 [38:05<24:45, 46.41s/it]Evaluating:  62%|██████▏   | 50/81 [38:51<23:57, 46.36s/it]Evaluating:  63%|██████▎   | 51/81 [39:37<23:09, 46.32s/it]Evaluating:  64%|██████▍   | 52/81 [40:23<22:21, 46.25s/it]Evaluating:  65%|██████▌   | 53/81 [41:09<21:32, 46.16s/it]Evaluating:  67%|██████▋   | 54/81 [41:56<20:47, 46.22s/it]Evaluating:  68%|██████▊   | 55/81 [42:42<20:00, 46.19s/it]Evaluating:  69%|██████▉   | 56/81 [43:28<19:15, 46.20s/it]Evaluating:  70%|███████   | 57/81 [44:14<18:28, 46.18s/it]Evaluating:  72%|███████▏  | 58/81 [45:00<17:43, 46.23s/it]Evaluating:  73%|███████▎  | 59/81 [45:46<16:55, 46.16s/it]Evaluating:  74%|███████▍  | 60/81 [46:33<16:11, 46.24s/it]Evaluating:  75%|███████▌  | 61/81 [47:19<15:25, 46.29s/it]Evaluating:  77%|███████▋  | 62/81 [48:06<14:39, 46.30s/it]Evaluating:  78%|███████▊  | 63/81 [48:53<13:58, 46.57s/it]Evaluating:  79%|███████▉  | 64/81 [49:39<13:11, 46.53s/it]Evaluating:  80%|████████  | 65/81 [50:26<12:24, 46.54s/it]Evaluating:  81%|████████▏ | 66/81 [51:12<11:38, 46.56s/it]Evaluating:  83%|████████▎ | 67/81 [51:59<10:51, 46.55s/it]Evaluating:  84%|████████▍ | 68/81 [52:45<10:04, 46.51s/it]Evaluating:  85%|████████▌ | 69/81 [53:32<09:20, 46.67s/it]Evaluating:  86%|████████▋ | 70/81 [54:19<08:33, 46.66s/it]Evaluating:  88%|████████▊ | 71/81 [55:06<07:46, 46.63s/it]Evaluating:  89%|████████▉ | 72/81 [55:53<07:00, 46.70s/it]Evaluating:  90%|█████████ | 73/81 [56:40<06:14, 46.82s/it]Evaluating:  91%|█████████▏| 74/81 [57:27<05:28, 46.87s/it]Evaluating:  93%|█████████▎| 75/81 [58:14<04:41, 46.94s/it]Evaluating:  94%|█████████▍| 76/81 [59:00<03:53, 46.75s/it]Evaluating:  95%|█████████▌| 77/81 [59:46<03:06, 46.64s/it]Evaluating:  96%|█████████▋| 78/81 [1:00:33<02:19, 46.64s/it]Evaluating:  98%|█████████▊| 79/81 [1:01:20<01:33, 46.76s/it]Evaluating:  99%|█████████▉| 80/81 [1:02:07<00:46, 46.81s/it]Evaluating: 100%|██████████| 81/81 [1:02:54<00:00, 46.85s/it]Evaluating: 100%|██████████| 81/81 [1:02:54<00:00, 46.60s/it]
+
+============================================================
+Overall Results
+============================================================
+  Samples:        81
+  Exact Match:    0.0000
+  BLEU:           0.0000
+  CodeBLEU:       0.0000
+  Token-F1:       0.0076
+  chrF:           0.0191
+  Edit Distance:  0.9568
+
+Per-project Results:
+  eclipse               n=   2  EM=0.000  BLEU=0.000  CodeBLEU=0.000  F1=0.001  chrF=0.014  ED=0.952
+  netty                 n=  79  EM=0.000  BLEU=0.000  CodeBLEU=0.000  F1=0.008  chrF=0.019  ED=0.957
+
+Metrics saved to eval_results/qwen2.5-coder-1.5b/ast+type_ctx20/metrics_finetuned.json
+Predictions saved to eval_results/qwen2.5-coder-1.5b/ast+type_ctx20/predictions_finetuned.jsonl
+
+Closest failures (lowest edit distance, top 5):
+  [netty/DetectionUtil.java] ED=0.758 BLEU=0.000 F1=0.048 chrF=0.139
+    Gold: /*
+ * Copyright 2011 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the A...
+    Pred: private static final int MAX_ARITY = 7;
+    private static static  private static static  private st...
+
+  [netty/Http2ClientInitializer.java] ED=0.778 BLEU=0.000 F1=0.016 chrF=0.110
+    Gold: ch.pipeline().addLast(sslCtx.newHandler(ch.alloc()), connectionHandler);
+    }
+    /**
+     * Config...
+    Pred: private static class  private static  private static  private static  private static  private static...
+
+  [netty/SpdyFrameDecoder.java] ED=0.797 BLEU=0.000 F1=0.041 chrF=0.086
+    Gold: "Received invalid RST_STREAM control frame");
+            }
+            streamID = getUnsignedInt(da...
+    Pred: private static static  private static static  private static static  private static static  private ...
+
+  [netty/QueueFactory.java] ED=0.814 BLEU=0.000 F1=0.008 chrF=0.066
+    Gold: /*
+ * Copyright 2011 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the A...
+    Pred: private static static static static static static static static static static static static static s...
+
+  [netty/SpdyFrameDecoder.java] ED=0.820 BLEU=0.000 F1=0.020 chrF=0.067
+    Gold: case SPDY_PING_FRAME:
+            if (data.readableBytes() != 4) {
+                throw new SpdyPro...
+    Pred: private static final int MAX_ARITY = 4;
+  private static static  private static static  private stat...
+
+
+Results saved to: ./eval_results/qwen2.5-coder-1.5b/ast+type_ctx20/

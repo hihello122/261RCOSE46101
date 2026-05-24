@@ -50,6 +50,8 @@ def parse_args():
                         help="파인튜닝된 LoRA adapter 디렉토리")
     parser.add_argument("--model_name", type=str, default=None,
                         help="베이스 모델 이름 (파인튜닝 전 평가용)")
+    parser.add_argument("--base_model_name", type=str, default=None,
+                        help="LoRA adapter 평가 시 adapter_config의 base_model_name_or_path를 덮어쓰기")
 
     # Data
     parser.add_argument("--dataset_dir", type=str, default="./data/processed/dataset")
@@ -269,7 +271,7 @@ def load_model_and_tokenizer(args):
         adapter_config_path = os.path.join(args.model_dir, "adapter_config.json")
         with open(adapter_config_path, "r") as f:
             adapter_config = json.load(f)
-        base_model_name = adapter_config.get(
+        base_model_name = args.base_model_name or adapter_config.get(
             "base_model_name_or_path",
             "deepseek-ai/deepseek-coder-1.3b-base"
         )

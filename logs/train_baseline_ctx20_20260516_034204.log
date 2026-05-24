@@ -1,0 +1,90 @@
+========================================
+ ConGra QLoRA Training
+========================================
+ Mode:          baseline
+ Model:         /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+ Model tag:     qwen2.5-coder-1.5b
+ Dataset:       ./data/processed/dataset_baseline_ctx20
+ Output:        /opt/dlami/nvme/ckpts/baseline_ctx20_qwen2.5-coder-1.5b
+ Batch:         1 x 4 = 4
+ Eval batch:    1
+ LR:            2e-4
+ Epochs:        10 (patience=3)
+ Max seq len:   2048
+ LoRA:          r=16, alpha=32
+ WandB:         false
+========================================
+
+
+[Restore] NVMe checkpoint missing; restoring local copy
+[Restore] ./ckpts/baseline_ctx20_qwen2.5-coder-1.5b → /opt/dlami/nvme/ckpts/baseline_ctx20_qwen2.5-coder-1.5b
+[Restore] Done: /opt/dlami/nvme/ckpts/baseline_ctx20_qwen2.5-coder-1.5b
+Model:          /opt/dlami/nvme/models/qwen2.5-coder-1.5b
+Dataset:        ./data/processed/dataset_baseline_ctx20
+Output dir:     /opt/dlami/nvme/ckpts/baseline_ctx20_qwen2.5-coder-1.5b
+Effective batch size: 4
+Eval batch size: 1
+Max seq length: 2048
+
+Loading dataset...
+  Train: 9082 samples
+  Val:   289 samples
+Loading tokenizer...
+Traceback (most recent call last):
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/utils/hub.py", line 422, in cached_files
+    hf_hub_download(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 84, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 132, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/opt/dlami/nvme/models/qwen2.5-coder-1.5b'. Use `repo_type` argument if needed.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 692, in from_pretrained
+    config = AutoConfig.from_pretrained(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 374, in from_pretrained
+    config_dict, unused_kwargs = PreTrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/utils/hub.py", line 278, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/utils/hub.py", line 473, in cached_files
+    raise OSError(f"{e}") from e
+OSError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/opt/dlami/nvme/models/qwen2.5-coder-1.5b'. Use `repo_type` argument if needed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/utils/hub.py", line 422, in cached_files
+    hf_hub_download(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 84, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 132, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/opt/dlami/nvme/models/qwen2.5-coder-1.5b'. Use `repo_type` argument if needed.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/final_project/train.py", line 308, in <module>
+    main()
+  File "/home/ubuntu/final_project/train.py", line 145, in main
+    tokenizer = AutoTokenizer.from_pretrained(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 696, in from_pretrained
+    config = PreTrainedConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/configuration_utils.py", line 641, in from_pretrained
+    config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/utils/hub.py", line 278, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+  File "/home/ubuntu/miniconda3/envs/final_project/lib/python3.10/site-packages/transformers/utils/hub.py", line 473, in cached_files
+    raise OSError(f"{e}") from e
+OSError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/opt/dlami/nvme/models/qwen2.5-coder-1.5b'. Use `repo_type` argument if needed.
+ERROR conda.cli.main_run:execute(148): `conda run python train.py --dataset_dir ./data/processed/dataset_baseline_ctx20 --model_name /opt/dlami/nvme/models/qwen2.5-coder-1.5b --output_dir /opt/dlami/nvme/ckpts/baseline_ctx20_qwen2.5-coder-1.5b --batch_size 1 --eval_batch_size 1 --gradient_accumulation_steps 4 --num_epochs 10 --learning_rate 2e-4 --max_seq_length 2048 --lora_r 16 --lora_alpha 32 --lora_dropout 0.05 --eval_steps 200 --early_stopping_patience 3 --seed 42` failed. (See above for error)
